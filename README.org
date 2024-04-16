@@ -1,25 +1,25 @@
 This is a Multi-Producer Single-Consumer queue implementation specific to SBCL x86-64. It is probably one of the fastest of its kind. It implements the beautiful algorithm found at [[https://www.1024cores.net/home/lock-free-algorithms/queues/non-intrusive-mpsc-node-based-queue][Non-intrusive MPSC node-based queue]], and is intended for developing high-performance [[https://en.wikipedia.org/wiki/Actor_model][Actor]] systems.
 
-Performance comparison with =sb-concurrency:queue= (8 producers, 1 consumer, 1M items; iMac Pro (2017), 8 Core Xeon, 32 GB RAM):
+Performance comparison with =sb-concurrency:queue= (8 producers, 1 consumer, 8M items; iMac Pro (2017), 8 Core Xeon, 32 GB RAM):
 #+begin_src
 FAST-MPSC-QUEUE> (benchmark-fast)
 Evaluation took:
-  0.070 seconds of real time
-  0.361649 seconds of total run time (0.359354 user, 0.002295 system)
-  517.14% CPU
-  225,471,346 processor cycles
-  16,472,752 bytes consed
+  0.438 seconds of real time
+  3.127986 seconds of total run time (2.892130 user, 0.235856 system)
+  714.16% CPU
+  1,398,546,106 processor cycles
+  128,508,736 bytes consed
 
 NIL
 FAST-MPSC-QUEUE> (benchmark-sb-concurrency)
 Evaluation took:
-  0.236 seconds of real time
-  1.703772 seconds of total run time (1.693935 user, 0.009837 system)
-  [ Run times consist of 0.012 seconds GC time, and 1.692 seconds non-GC time. ]
-  722.03% CPU
-  755,228,077 processor cycles
-  16,291,008 bytes consed
+  1.650 seconds of real time
+  14.386185 seconds of total run time (14.321212 user, 0.064973 system)
+  [ Run times consist of 0.002 seconds GC time, and 14.385 seconds non-GC time. ]
+  871.88% CPU
+  5,267,885,814 processor cycles
+  128,292,352 bytes consed
 
 NIL
 #+end_src
-=fast-mpsc-queue= is able to process items at =14.3M/s= while =sb-concurrency:queue= did =4.2M/s=. That's lots of speed!
+=fast-mpsc-queue= is able to process items at =18.2M/s= while =sb-concurrency:queue= did =4.8M/s=. That's lots of speed!
