@@ -1,0 +1,17 @@
+(in-package :sb-vm)
+(defknown fast-mpsc-queue:atomic-swap-car (cons t)
+    t (movable flushable always-translatable)
+  :overwrite-fndb-silently t)
+(define-vop (fast-mpsc-queue:atomic-swap-car)
+  (:translate fast-mpsc-queue:atomic-swap-car)
+  (:policy :fast-safe)
+  (:args (cons :scs (descriptor-reg))
+         (val :scs (descriptor-reg any-reg) :target r))
+  (:results (r :scs (descriptor-reg any-reg)))
+  (:vop-var vop)
+  (:generator
+   5
+   (let ((ea (ea (- list-pointer-lowtag) cons)))
+     (emit-gengc-barrier cons ea r (vop-nth-arg 1 vop) val)
+     (move r val)
+     (inst xchg ea r))))
